@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 
-export default function Header({cart}) {
+export default function Header({cart, removeFromCart, increaseGuitar, decreaseGuitar}) {
 
     //state derivado
     const isEmpty = useMemo( () => cart.length === 0, [cart])
-    const cartTotal = useMemo(() => cart.reduce( (total, item ) => total + (item.quantity * item.price), 0), [cart])
+    const cartTotal = useMemo(() => cart.reduce( (total, item ) => total + (item.quantity * item.price), 0),
+     [cart])
 
     return(
         <header className="py-5 header">
@@ -51,6 +52,7 @@ export default function Header({cart}) {
                                             <button
                                                 type="button"
                                                 className="btn btn-dark"
+                                                onClick={() => decreaseGuitar(guitar.id)}
                                             >
                                                 -
                                             </button>
@@ -58,6 +60,7 @@ export default function Header({cart}) {
                                             <button
                                                 type="button"
                                                 className="btn btn-dark"
+                                                onClick={() => increaseGuitar(guitar.id)}
                                             >
                                                 +
                                             </button>
@@ -66,6 +69,7 @@ export default function Header({cart}) {
                                             <button
                                                 className="btn btn-danger"
                                                 type="button"
+                                                onClick={() => removeFromCart(guitar.id)}
                                             >
                                                 X
                                             </button>
