@@ -1,60 +1,12 @@
-import { useState  } from 'react'
+
 import Guitar from "./components/Guitar"
 import Header from "./components/Header"
-import { db } from './data/db'
+import { useCart } from './hooks/useCart'
 
 function App() {
-    
-    const [data, setData] = useState(db)
-    const [cart, setCart] = useState([])
 
-    const MAX_ITEM = 5
-      
-      //funcion para agregar un elemento nuevo al carrito
-    function addToCart(item) {
-      const itemExist = cart.findIndex(guitar => guitar.id === item.id)
-      if(itemExist >= 0){// validacion de existencia en el carrito
-        if(cart[itemExist].quantity >= MAX_ITEM) return
-      const updatedCart = [...cart]
-      updatedCart[itemExist].quantity++
-      setCart(updatedCart)
-      }else{
-       item.quantity = 1
-        setCart([...cart, item])
-      }
-    }
-      //funcion para eliminar un elemento del carrito
-    function removeFromCart(id){
-      setCart(prevCart => prevCart.filter(guitar => guitar.id != id))
-    }
-
-      //incrementar el valor de un producto
-    function increaseGuitar(id){
-      const updatedCart = cart.map( item => {
-        if(item.id === id && item.quantity < MAX_ITEM){
-          return {
-            ...item,
-            quantity: item.quantity + 1
-          }
-        }
-        return item
-      })
-      setCart(updatedCart)
-    }
-
-    //disminuir el valor de un producto
-    function decreaseGuitar(id){
-      const declineCart = cart.map( item => {
-        if(item.id === id && item.quantity > 1){
-          return {
-            ...item,
-            quantity: item.quantity - 1
-          }
-        }
-        return item
-      })
-      setCart(declineCart)
-    }
+  const {data, cart, addToCart, removeFromCart, increaseGuitar,
+    decreaseGuitar, clearCart, isEmpty, cartTotal } = useCart()
 
   return (
     <>  
@@ -64,6 +16,9 @@ function App() {
       removeFromCart= {removeFromCart}
       increaseGuitar={increaseGuitar}
       decreaseGuitar={decreaseGuitar}
+      clearCart={clearCart}
+      isEmpty={isEmpty}
+      cartTotal={cartTotal}
     />
 
     <main className="container-xl mt-5">
@@ -74,7 +29,6 @@ function App() {
             <Guitar 
               key={guitar.id}
               guitar={guitar}
-              setCart={setCart}
               addToCart={addToCart}
             />
           ))}
